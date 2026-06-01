@@ -1,0 +1,54 @@
+#options-row {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.entry-row {
+    display:flex;
+    flex-direction: row;
+    width:100%;
+    vertical-align: middle;
+}
+
+#add-row {
+    margin:0;
+}
+
+#reps-input, #weight-input {
+    display:flex;
+    flex-direction: row;
+    gap:8px;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    width:fit-content;
+}
+
+#reps-input input, #weight-input input {
+    width:25%;
+    max-width:25%;
+}
+
+.box1 {
+    flex:1;
+} 
+
+.box2, .box3 {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box4, .sbox4 {
+    flex:0.3;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    justify-content: center;
+}
+
+.sbox2, .sbox3 {
+    flex:1.4;
+}

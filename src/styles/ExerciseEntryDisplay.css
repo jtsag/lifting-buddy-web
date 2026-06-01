@@ -1,0 +1,50 @@
+#main-container-eed {
+    display: flex;
+    flex-direction:column;
+}
+
+#title-row {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    vertical-align:middle;
+    gap:8px;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    vertical-align: middle;    
+}
+
+.session-row {
+    display:flex;
+    flex-direction: row;
+    width:100%;
+    vertical-align: middle;
+}
+
+.box1, .box2, .box3, .sbox1, .sbox2, .sbox3 {
+    border: 4px solid var(--border-color);
+    padding: 12px;
+}
+
+.box1, .box2, .box3 {
+    flex:1;
+}
+
+.box2 {
+    align-content:center;
+}
+
+.box3 {
+    align-content:end;
+}
+
+.sbox1 {
+    flex:1;
+}
+
+#main-container-eed .sbox2, #main-container-eed  .sbox3 {
+    flex:1.0;
+}

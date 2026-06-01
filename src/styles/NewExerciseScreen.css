@@ -1,0 +1,5 @@
+#add-row-new-ex {
+    display:flex;
+    flex-direction: row;
+    gap: 8px;
+}
