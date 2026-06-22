@@ -6,9 +6,11 @@ import EditScreen from './screens/EditScreen.tsx';
 import TagEditScreen from './screens/TagEditScreen.tsx';
 import ProgramAddScreen from './screens/ProgramAddScreen.tsx';
 import ProgramDeleteScreen from './screens/ProgramDeleteScreen.tsx';
+import LoginScreen from './screens/LoginScreen.tsx';
 import { useEffect, useState, createContext, useContext } from 'react';
 import { getAllExercises } from './db_utils.ts';
 import { dataCleanup } from './data_utils.ts';
+import { auth } from './firebase.ts';
 
 interface AppContextType {
   allTags : Set<string>;
@@ -36,6 +38,14 @@ function App() {
   }, [])
 
   useEffect(() => {dataCleanup()}, []) // Fire once to clean up the local database in background
+
+  const [user, setUser] = useState(auth.currentUser);
+
+  useEffect(() => {
+    auth.onAuthStateChanged(u => setUser(u));
+  }, []);
+
+  if (!user) return <LoginScreen />;
 
   return (
     <AppContext.Provider value={{allTags, setAllTags}}>
