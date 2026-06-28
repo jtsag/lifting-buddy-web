@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import SuggestionRow from "./SuggestionRow";
-import { getSessionsByExercise } from "../db_utils.ts";
+import { getSessionsByExercise } from "../db_utils_v2.ts";
 import { sessionDisplayParts, type Session } from "../data_utils.ts";
 import '../styles/ExerciseEntryDisplay.css'
 

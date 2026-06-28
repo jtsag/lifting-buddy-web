@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import '../styles/NewExerciseScreen.css'
-import '../db_utils.ts'
-import { saveExercise } from '../db_utils.ts'
+// import '../db_utils_v2.ts'
+import { saveExercise } from '../db_utils_v2.ts'
 import { useNavigate } from 'react-router-dom'
 
 interface NewExerciseProps {

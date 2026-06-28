@@ -8,7 +8,7 @@ import ProgramAddScreen from './screens/ProgramAddScreen.tsx';
 import ProgramDeleteScreen from './screens/ProgramDeleteScreen.tsx';
 import LoginScreen from './screens/LoginScreen.tsx';
 import { useEffect, useState, createContext, useContext } from 'react';
-import { getAllExercises } from './db_utils.ts';
+import { getAllExercises } from './db_utils_v2.ts';
 import { dataCleanup } from './data_utils.ts';
 import { auth } from './firebase.ts';
 
