@@ -8,7 +8,7 @@ import ProgramAddScreen from './screens/ProgramAddScreen.tsx';
 import ProgramDeleteScreen from './screens/ProgramDeleteScreen.tsx';
 import LoginScreen from './screens/LoginScreen.tsx';
 import { useEffect, useState, createContext, useContext } from 'react';
-import { getAllExercises, handleRedirectResult } from './db_utils_v2.ts';
+import { getAllExercises } from './db_utils_v2.ts';
 import { dataCleanup } from './data_utils.ts';
 import { auth } from './firebase.ts';
 
@@ -42,7 +42,6 @@ function App() {
   const [user, setUser] = useState(auth.currentUser);
 
   useEffect(() => {
-    handleRedirectResult()
     auth.onAuthStateChanged(u => setUser(u));
   }, []);
 

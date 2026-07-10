@@ -9,13 +9,11 @@ import {
 // USER ACCOUNT CONTROLS
 // ═════════════════════════════════════════════════════════════════════════════
 
-import { signInWithRedirect, getRedirectResult, signOut } from "firebase/auth";
+import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "./firebase";
 
-export const login = () => signInWithRedirect(auth, provider);
+export const login = () => signInWithPopup(auth, provider);
 export const logout = () => signOut(auth);
-export const handleRedirectResult = () => getRedirectResult(auth).catch(console.error);
-
 
 // ═════════════════════════════════════════════════════════════════════════════
 // SESSIONS
