@@ -1,6 +1,6 @@
 // ─── Session Types ────────────────────────────────────────────────────────────
 
-import { deleteExercise, getAllExercises, getSessionsByExercise } from "./db_utils";
+import { deleteExercise, getAllExercises, getSessionsByExercise } from "./db_utils_v2";
 
 export type Session = {
     time: number;

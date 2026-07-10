@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteProgram } from "../db_utils";
+import { deleteProgram } from "../db_utils_v2";
 
 interface PDSProps {
 

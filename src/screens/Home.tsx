@@ -3,7 +3,7 @@ import CheckboxDropdownMenu from '../panels/CheckboxDropdownMenu'
 import ExerciseEntryDisplay from '../panels/ExerciseEntryDisplay';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getAllExercises } from '../db_utils';
+import { getAllExercises } from '../db_utils_v2';
 import { type Exercise } from '../data_utils';
 
 interface HomeScreenProps {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { exerciseTagString, findSuggestion, sessionDisplayParts, type Exercise, type Program, type Session } from "../data_utils.ts";
-import { deleteSession, getExercise, getProgram, getSessionsByExercise, saveSession } from "../db_utils.ts";
+import { deleteSession, getExercise, getProgram, getSessionsByExercise, saveSession } from "../db_utils_v2.ts";
 import SuggestionRow from "../panels/SuggestionRow.tsx";
 import EditOptionMenu from "../panels/EditOptionMenu.tsx";
 import '../styles/EditScreen.css';

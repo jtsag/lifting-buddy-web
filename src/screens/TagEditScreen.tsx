@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addTagToExercise, getExercise, removeTagFromExercise } from "../db_utils";
+import { addTagToExercise, getExercise, removeTagFromExercise } from "../db_utils_v2";
 import "../styles/TagEditScreen.css";
 import { useAppContext } from "../App";
 

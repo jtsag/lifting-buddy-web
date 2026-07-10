@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { findSuggestion, type Program, type Session } from "../data_utils";
-import { getProgram, getSessionsByExercise } from "../db_utils";
+import { getProgram, getSessionsByExercise } from "../db_utils_v2";
 import "../styles/SuggestionRow.css";
 
 interface SRProps {
