@@ -24,6 +24,13 @@ export type Program = {
     max: number;
 };
 
+// ─── Graph Data Type ──────────────────────────────────────────────────────────
+export type GraphData = {
+    date: string;
+    value: number;
+    highlight: boolean;
+}
+
 // ─── Utility Funcs ────────────────────────────────────────────────────────────
 
 export function sessionDisplayParts(session:Session) : string[] {
@@ -99,4 +106,60 @@ export async function dataCleanup() {
             deleteExercise(exer.name)
         }
     }
+}
+
+// ------------- Graph Data Utilities -----------------
+
+export function getDateFormatShort(time : number) {
+    const date = (new Date(time)).toLocaleDateString("en-US", {
+        month:"numeric",
+        day:'numeric'
+    })
+    return date
+}
+
+export function getTimeTemplate(monthsBack : number) {
+    const now = new Date();
+    const refDate = new Date();
+    refDate.setMonth(refDate.getMonth() - monthsBack);
+
+    const twoMonthsAgo = new Date(refDate.getTime());
+    const timeList = []
+    while (twoMonthsAgo <= now) {
+        timeList.push({date:twoMonthsAgo.getTime(), data:0})
+        twoMonthsAgo.setDate(twoMonthsAgo.getDate() + 1)
+    }
+
+    return {timeList: timeList, startDate: refDate}
+}
+
+export function timeVsSessionData(sessionTransform : (e: Session) => number, monthOffset : number, sessions : Session[] | undefined) {
+    const {timeList, startDate} = getTimeTemplate(monthOffset)
+    const dataList : GraphData[]= []
+    const workingSessionList = sessions?.filter(e => new Date(e.time) >= startDate) ?? []
+    const mostRecentSessionOutOfRange = sessions?.find(e => new Date(e.time) < startDate)
+
+    var i = 0
+    while(workingSessionList.length > 0) {
+        const currentDateItem = new Date(timeList[i].date)
+        const sessionDate = new Date(workingSessionList.at(-1)!.time)
+        if(currentDateItem.getMonth() === sessionDate.getMonth() && currentDateItem.getDate() === sessionDate.getDate()) {
+            dataList.push({date: getDateFormatShort(currentDateItem.getTime()), value:sessionTransform(workingSessionList.pop()!), highlight:true})
+        } else {
+            if(i === 0)
+                if(mostRecentSessionOutOfRange)
+                    dataList.push({date: getDateFormatShort(currentDateItem.getTime()), value:sessionTransform(mostRecentSessionOutOfRange), highlight:false})
+                else
+                    dataList.push({date: getDateFormatShort(currentDateItem.getTime()), value:0, highlight:false})
+            else {
+                const lastItem = {...dataList.at(-1)!}
+                lastItem.highlight = false
+                lastItem.date = getDateFormatShort(currentDateItem.getTime())
+                dataList.push(lastItem)
+            }  
+        }
+        i++
+    }
+
+    return dataList
 }

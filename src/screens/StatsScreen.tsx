@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams} from "react-router-dom";
-import { type Session, sessionDisplayParts } from "../data_utils.ts";
+import { type Session, sessionDisplayParts, timeVsSessionData } from "../data_utils.ts";
 import { getSessionsByExercise } from "../db_utils_v2.ts";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import "../styles/StatsScreen.css";
+import GraphPanel from "../panels/GraphPanel.tsx";
 
 interface StatsScreenProps {
 
@@ -38,60 +38,6 @@ const StatsScreen : React.FC<StatsScreenProps> = ({
         return String(maxWeight)
     }
 
-    function getDateFormatShort(time : number) {
-        const date = (new Date(time)).toLocaleDateString("en-US", {
-            month:"numeric",
-            day:'numeric'
-        })
-        return date
-    }
-
-    function getTimeTemplate(monthsBack : number) {
-        const now = new Date();
-        const refDate = new Date();
-        refDate.setMonth(refDate.getMonth() - monthsBack);
-
-        const twoMonthsAgo = new Date(refDate.getTime());
-        const timeList = []
-        while (twoMonthsAgo <= now) {
-            timeList.push({date:twoMonthsAgo.getTime(), data:0})
-            twoMonthsAgo.setDate(twoMonthsAgo.getDate() + 1)
-        }
- 
-        return {timeList: timeList, startDate: refDate}
-    }
-
-    function timeVsWeightData(sessionTransform : (e: Session) => number) {
-        const {timeList, startDate} = getTimeTemplate(monthOffset)
-        const dataList : { date: string; data: number; highlight:boolean }[]= []
-        const workingSessionList = sessions?.filter(e => new Date(e.time) >= startDate) ?? []
-        const mostRecentSessionOutOfRange = sessions?.find(e => new Date(e.time) < startDate)
-
-        var i = 0
-        while(workingSessionList.length > 0) {
-            const currentDateItem = new Date(timeList[i].date)
-            const sessionDate = new Date(workingSessionList.at(-1)!.time)
-            if(currentDateItem.getMonth() === sessionDate.getMonth() && currentDateItem.getDate() === sessionDate.getDate()) {
-                dataList.push({date: getDateFormatShort(currentDateItem.getTime()), data:sessionTransform(workingSessionList.pop()!), highlight:true})
-            } else {
-                if(i === 0)
-                    if(mostRecentSessionOutOfRange)
-                        dataList.push({date: getDateFormatShort(currentDateItem.getTime()), data:sessionTransform(mostRecentSessionOutOfRange), highlight:false})
-                    else
-                        dataList.push({date: getDateFormatShort(currentDateItem.getTime()), data:0, highlight:false})
-                else {
-                    const lastItem = {...dataList.at(-1)!}
-                    lastItem.highlight = false
-                    lastItem.date = getDateFormatShort(currentDateItem.getTime())
-                    dataList.push(lastItem)
-                }  
-            }
-            i++
-        }
-
-        return dataList
-    }
-
     return (
         <div id="main-container-stats">
             <button onClick={() => {navigate(`/editExercise/${name}`)}} style={{alignSelf:"flex-start"}}>Back</button>
@@ -111,33 +57,8 @@ const StatsScreen : React.FC<StatsScreenProps> = ({
                 <option value="6">6 Months</option>
             </select>
             <div className="spacer"></div>
-            <h2>Weight Over Time</h2>
-            <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={timeVsWeightData((e) => (e.weight))} margin={{bottom:20, left:20, right:20}}>
-                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                    <XAxis dataKey="date" label={{value:"Date", position:"insideBottom", offset:-10}} />
-                    <YAxis label={{value:"Weight (lbs)", position:"insideLeft", angle:-90}}/>
-                    {/* <Tooltip /> */}
-                    <Line
-                        dataKey="data"
-                        dot={(props) => {
-                            const { cx, cy, payload } = props;
-                            const isBold = payload.highlight; // your condition here
-                            return (
-                            <circle
-                                key={`dot-${cx}-${cy}`}
-                                cx={cx}
-                                cy={cy}
-                                r={isBold ? 6 : 3}
-                                fill={isBold ? "white" : "#8884d8"}
-                                stroke="#8884d8"
-                                strokeWidth={isBold ? 2 : 1}
-                            />
-                            );
-                        }}
-                    />
-                </LineChart>
-            </ResponsiveContainer>
+            <GraphPanel data={timeVsSessionData((e) => (e.weight), monthOffset, sessions)} xlabel="Date" ylabel="Weight (lbs)" title="Weight Over Time"/>
+            <GraphPanel data={timeVsSessionData((e) => (e.weight * e.reps * e.sets), monthOffset, sessions)} xlabel="Date" ylabel="Volume" title="Total Volume Over Time" subtitle="Sets x Reps x Weight"/>
         </div>
     )
 }
