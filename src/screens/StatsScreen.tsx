@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams} from "react-router-dom";
 import { type Session, sessionDisplayParts } from "../data_utils.ts";
 import { getSessionsByExercise } from "../db_utils_v2.ts";
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import "../styles/StatsScreen.css";
 
 interface StatsScreenProps {
