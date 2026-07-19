@@ -7,6 +7,7 @@ import TagEditScreen from './screens/TagEditScreen.tsx';
 import ProgramAddScreen from './screens/ProgramAddScreen.tsx';
 import ProgramDeleteScreen from './screens/ProgramDeleteScreen.tsx';
 import LoginScreen from './screens/LoginScreen.tsx';
+import StatsScreen from './screens/StatsScreen.tsx';
 import { useEffect, useState, createContext, useContext } from 'react';
 import { getAllExercises } from './db_utils_v2.ts';
 import { dataCleanup } from './data_utils.ts';
@@ -58,6 +59,7 @@ function App() {
           <Route path='/tagEdit/:name' element={<TagEditScreen/>}/>
           <Route path='/programAdd/:name' element={<ProgramAddScreen />}/>
           <Route path='/programDelete/:name' element={<ProgramDeleteScreen/>}/>
+          <Route path='/stats/:name' element={<StatsScreen/>}/>
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

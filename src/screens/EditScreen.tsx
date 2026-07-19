@@ -53,7 +53,8 @@ const EditScreen:React.FC<EditScreenProps> = ({
                 <button onClick={() => {navigate('/')}}>Back</button>
                 <EditOptionMenu options={{
                     "Edit Tags" : `/tagEdit/${name}`,
-                    [(program? "Delete Program" : "Add Program")]: (program? `/programDelete/${name}` : `/programAdd/${name}` )               
+                    [(program? "Delete Program" : "Add Program")]: (program? `/programDelete/${name}` : `/programAdd/${name}` ),
+                    "See Stats" : `/stats/${name}`                
                 }}/>
             </div>
             <h1 id="title">{name?.toUpperCase()}</h1>
@@ -95,14 +96,15 @@ const EditScreen:React.FC<EditScreenProps> = ({
                                 weight:Number(weight)
                             })
 
-                            setSets("")
-                            setReps("")
-                            setWeight("")
+                            
 
                         } catch(error) {
                             console.log(error)
                         }
                         refreshSessions()
+                        setSets("")
+                        setReps("")
+                        setWeight("")
                     }}>+</button>
                 </div>
             </div>
