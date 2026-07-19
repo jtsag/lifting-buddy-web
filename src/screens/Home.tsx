@@ -27,17 +27,21 @@ const Home:React.FC<HomeScreenProps> = ({
     const navigate = useNavigate()
     const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set())
     const [allExercises, setExerciseList] = useState<Exercise[]>([])
+    const [loading, setLoading] = useState<boolean>(true);
     
     useEffect(() => {
         async function load() {
             const all = await getAllExercises();
             setExerciseList(all);
+            setLoading(false);
         }
         load();
     }, [])
 
+    if(loading) return <div></div>
+
     return (
-    <div id="main-container">
+    <div id="main-container" className="fade-in">
         <div id="title-bar">
             <div style={{flex:0.25}}/>
             <h1 id="title">{appName.toUpperCase()}</h1>

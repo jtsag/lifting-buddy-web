@@ -16,6 +16,7 @@ const EditScreen:React.FC<EditScreenProps> = ({
     const {name} = useParams<{name:string}>();
     const navigate = useNavigate()
     if(!name) { navigate("/") }
+    const [loading, setLoading] = useState<boolean>(true);
     const [program, setProgram] = useState<Program | undefined>(undefined);
     const [exercise, setExercise] = useState<Exercise>({name:name!!, tags:[]});
     const [sessions, setSessions] = useState<Session[]>([]);
@@ -31,24 +32,23 @@ const EditScreen:React.FC<EditScreenProps> = ({
 
     useEffect(() => {
         async function load() {
-            const prog = await getProgram(name!!);
+            const [prog, exer] = await Promise.all([ 
+                getProgram(name!!),
+                getExercise(name!!),
+                refreshSessions()
+            ]);
             setProgram(prog);
-        }
-        load();
-    }, [])
-    
-    useEffect(() => {
-        async function load() {
-            const exer = await getExercise(name!!);
             setExercise(exer!!);
+            setLoading(false);
         }
+
         load();
     }, [])
 
-    useEffect(() => {refreshSessions()}, [])
+    if(loading) return <div></div>
 
     return (
-        <div id="main-container-edit">
+        <div id="main-container-edit" className="fade-in">
             <div id="options-row">
                 <button onClick={() => {navigate('/')}}>Back</button>
                 <EditOptionMenu options={{

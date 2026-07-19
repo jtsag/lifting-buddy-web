@@ -21,12 +21,12 @@ const StatsScreen : React.FC<StatsScreenProps> = ({
     const [monthOffset, setMonthOffset] = useState<number>(2);
 
     useEffect(() => {
-        async function refreshSessions() {
+        async function loadSessions() {
             const sessionList = await getSessionsByExercise(name!!);
             setSessions(sessionList.toReversed())    
         }
 
-        refreshSessions()
+        loadSessions()
     }, [])
 
 
