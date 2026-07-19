@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams} from "react-router-dom";
 import { type Session, sessionDisplayParts } from "../data_utils.ts";
-import { getSession, getSessionsByExercise } from "../db_utils_v2.ts";
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { getSessionsByExercise } from "../db_utils_v2.ts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+import "../styles/StatsScreen.css";
 
 interface StatsScreenProps {
 
@@ -17,6 +18,7 @@ const StatsScreen : React.FC<StatsScreenProps> = ({
     if(!name) { navigate("/") }
 
     const [sessions, setSessions] = useState<Session[]>();
+    const [monthOffset, setMonthOffset] = useState<number>(2);
 
     useEffect(() => {
         async function refreshSessions() {
@@ -60,7 +62,7 @@ const StatsScreen : React.FC<StatsScreenProps> = ({
     }
 
     function timeVsWeightData(sessionTransform : (e: Session) => number) {
-        const {timeList, startDate} = getTimeTemplate(2)
+        const {timeList, startDate} = getTimeTemplate(monthOffset)
         const dataList : { date: string; data: number; highlight:boolean }[]= []
         const workingSessionList = sessions?.filter(e => new Date(e.time) >= startDate) ?? []
         const mostRecentSessionOutOfRange = sessions?.find(e => new Date(e.time) < startDate)
@@ -92,35 +94,50 @@ const StatsScreen : React.FC<StatsScreenProps> = ({
 
     return (
         <div id="main-container-stats">
+            <button onClick={() => {navigate(`/editExercise/${name}`)}} style={{alignSelf:"flex-start"}}>Back</button>
             <h1 id="stats-title">STATS FOR {name?.toUpperCase()}</h1>
             <div id="info-snapshot-row">
                 <p>Last session recorded: {sessions ? sessionDisplayParts(sessions![0])[0] : ""}</p>
-                <p>Max weight achieved (all time): {maxWeightDisplay()}</p>
+                <div className="vertical-divider"><p>|</p></div>
+                <p>Max weight achieved (all time): {maxWeightDisplay()} lbs</p>
             </div>
-            <LineChart data={timeVsWeightData((e) => (e.weight))} width={1000} height={300}>
-                {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                <XAxis dataKey="date" />
-                <YAxis />
-                {/* <Tooltip /> */}
-                <Line
-                    dataKey="data"
-                    dot={(props) => {
-                        const { cx, cy, payload } = props;
-                        const isBold = payload.highlight; // your condition here
-                        return (
-                        <circle
-                            key={`dot-${cx}-${cy}`}
-                            cx={cx}
-                            cy={cy}
-                            r={isBold ? 6 : 3}
-                            fill={isBold ? "white" : "#8884d8"}
-                            stroke="#8884d8"
-                            strokeWidth={isBold ? 2 : 1}
-                        />
-                        );
-                    }}
-                />
-            </LineChart>
+            <div className="divider"></div>
+            <select value={monthOffset} onChange={(e) => setMonthOffset(Number(e.target.value))}>
+                <option value="1">1 Month</option>
+                <option value="2">2 Months</option>
+                <option value="3">3 Months</option>
+                <option value="4">4 Months</option>
+                <option value="5">5 Months</option>
+                <option value="6">6 Months</option>
+            </select>
+            <div className="spacer"></div>
+            <h2>Weight Over Time</h2>
+            <ResponsiveContainer width="100%" height={400}>
+                <LineChart data={timeVsWeightData((e) => (e.weight))} margin={{bottom:20, left:20, right:20}}>
+                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                    <XAxis dataKey="date" label={{value:"Date", position:"insideBottom", offset:-10}} />
+                    <YAxis label={{value:"Weight (lbs)", position:"insideLeft", angle:-90}}/>
+                    {/* <Tooltip /> */}
+                    <Line
+                        dataKey="data"
+                        dot={(props) => {
+                            const { cx, cy, payload } = props;
+                            const isBold = payload.highlight; // your condition here
+                            return (
+                            <circle
+                                key={`dot-${cx}-${cy}`}
+                                cx={cx}
+                                cy={cy}
+                                r={isBold ? 6 : 3}
+                                fill={isBold ? "white" : "#8884d8"}
+                                stroke="#8884d8"
+                                strokeWidth={isBold ? 2 : 1}
+                            />
+                            );
+                        }}
+                    />
+                </LineChart>
+            </ResponsiveContainer>
         </div>
     )
 }

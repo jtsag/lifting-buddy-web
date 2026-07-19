@@ -1,0 +1,29 @@
+#info-snapshot-row {
+    display:flex;
+    flex-direction: row;
+    width:100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.vertical-divider {
+    /* border-left: 1px solid #000; */
+    height: 100%;
+    margin: 0 10px;
+}
+
+#main-container-stats {
+    display:flex;
+    flex-direction: column;
+    width:100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.divider {
+    margin: 20px 0;
+}
+
+.spacer {
+    height: 20px;
+}
